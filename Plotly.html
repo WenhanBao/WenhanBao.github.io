@@ -366,18 +366,23 @@ rest_raw &lt;- read_csv(&quot;./nyc_inspec.csv&quot;)</code></pre>
 </div>
 <div id="create-the-boxplot" class="section level3">
 <h3>Create the boxplot</h3>
-<pre class="r"><code>boxplot &lt;- 
-  rest_raw %&gt;% 
-  janitor::clean_names() %&gt;% 
-  select(camis, boro, score) %&gt;% 
+<pre class="r"><code>boxplot &lt;-
+  rest_raw %&gt;%
+  janitor::clean_names() %&gt;%
+  select(camis, boro, score, inspection_date) %&gt;%
   unique() %&gt;%
-  mutate(boro = as.character(boro)) %&gt;% 
-  filter(boro %in% c(&quot;Manhattan&quot;, &quot;Bronx&quot;, &quot;Brooklyn&quot;, &quot;Queens&quot;, &quot;Staten Island&quot;)) %&gt;% 
+  mutate(boro = as.character(boro)) %&gt;%
+  filter(boro %in% c(&quot;Manhattan&quot;, &quot;Bronx&quot;, &quot;Brooklyn&quot;, &quot;Queens&quot;, &quot;Staten Island&quot;)) %&gt;%
   group_by(camis, boro) %&gt;%
-  drop_na(score) %&gt;% 
-  summarize(mean_score = round(mean(score), digits = 2), .groups = &quot;drop&quot;) %&gt;% 
-  mutate(boro = fct_reorder(boro, mean_score)) %&gt;% 
-  plot_ly(y = ~mean_score, color = ~boro, type = &quot;box&quot;, colors = &quot;viridis&quot;) %&gt;% 
+  drop_na(score) %&gt;%
+  summarize(mean_score = round(mean(score), digits = 2), .groups = &quot;drop&quot;) %&gt;%
+  mutate(boro = fct_reorder(boro, mean_score)) %&gt;%
+  plot_ly(
+    y = ~ mean_score,
+    color = ~ boro,
+    type = &quot;box&quot;,
+    colors = &quot;viridis&quot;
+  ) %&gt;%
   layout(
     title = &quot;Score for restaurants in different location in New York&quot;,
     xaxis = list(title = &quot;Location&quot;),
@@ -385,8 +390,32 @@ rest_raw &lt;- read_csv(&quot;./nyc_inspec.csv&quot;)</code></pre>
   )</code></pre>
 <hr />
 </div>
-<div id="create-three-distinct-plot-type" class="section level3">
-<h3>Create three distinct plot type</h3>
+<div id="create-the-scatterplot" class="section level3">
+<h3>Create the scatterplot</h3>
+<pre class="r"><code>scatter &lt;-
+  rest_raw %&gt;%
+  filter(boro == &quot;Manhattan&quot;,
+         latitude != 0) %&gt;%
+  select(camis, score, inspection_date, latitude, longitude) %&gt;%
+  group_by(camis, latitude, longitude) %&gt;%
+  drop_na(score) %&gt;%
+  summarize(mean_score = round(mean(score), digits = 2), .groups = &quot;drop&quot;) %&gt;%
+  mutate(text_label = str_c(&quot;Scores:&quot;, mean_score)) %&gt;%
+  plot_ly(
+    x = ~ latitude,
+    y = ~ longitude,
+    type = &quot;scatter&quot;,
+    mode = &quot;markers&quot;,
+    color = ~ mean_score,
+    text = ~ text_label,
+    colors = &quot;viridis&quot;,
+    alpha = 0.5
+  ) %&gt;%
+  layout(
+    title = &quot;Score for restaurants in Manhattan&quot;,
+    xaxis = list(title = &quot;Latitude&quot;),
+    yaxis = list(title = &quot;Longitude&quot;)
+  )</code></pre>
 </div>
 
 

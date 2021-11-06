@@ -21,20 +21,24 @@ rest_raw <- read_csv("./nyc_inspec.csv")
 
 ### Create the boxplot
 
-
 ```{r}
-boxplot <- 
-  rest_raw %>% 
-  janitor::clean_names() %>% 
-  select(camis, boro, score) %>% 
+boxplot <-
+  rest_raw %>%
+  janitor::clean_names() %>%
+  select(camis, boro, score, inspection_date) %>%
   unique() %>%
-  mutate(boro = as.character(boro)) %>% 
-  filter(boro %in% c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island")) %>% 
+  mutate(boro = as.character(boro)) %>%
+  filter(boro %in% c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island")) %>%
   group_by(camis, boro) %>%
-  drop_na(score) %>% 
-  summarize(mean_score = round(mean(score), digits = 2), .groups = "drop") %>% 
-  mutate(boro = fct_reorder(boro, mean_score)) %>% 
-  plot_ly(y = ~mean_score, color = ~boro, type = "box", colors = "viridis") %>% 
+  drop_na(score) %>%
+  summarize(mean_score = round(mean(score), digits = 2), .groups = "drop") %>%
+  mutate(boro = fct_reorder(boro, mean_score)) %>%
+  plot_ly(
+    y = ~ mean_score,
+    color = ~ boro,
+    type = "box",
+    colors = "viridis"
+  ) %>%
   layout(
     title = "Score for restaurants in different location in New York",
     xaxis = list(title = "Location"),
@@ -45,6 +49,32 @@ boxplot <-
 
 ----------------------------------------------
 
-### Create three distinct plot type
+### Create the scatterplot
 
+```{r}
+scatter <-
+  rest_raw %>%
+  filter(boro == "Manhattan",
+         latitude != 0) %>%
+  select(camis, score, inspection_date, latitude, longitude) %>%
+  group_by(camis, latitude, longitude) %>%
+  drop_na(score) %>%
+  summarize(mean_score = round(mean(score), digits = 2), .groups = "drop") %>%
+  mutate(text_label = str_c("Scores:", mean_score)) %>%
+  plot_ly(
+    x = ~ latitude,
+    y = ~ longitude,
+    type = "scatter",
+    mode = "markers",
+    color = ~ mean_score,
+    text = ~ text_label,
+    colors = "viridis",
+    alpha = 0.5
+  ) %>%
+  layout(
+    title = "Score for restaurants in Manhattan",
+    xaxis = list(title = "Latitude"),
+    yaxis = list(title = "Longitude")
+  )
+```
 
