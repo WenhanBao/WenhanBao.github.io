@@ -1,0 +1,88 @@
+---
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+***Resume***
+
+**Wenhan Bao**
+
+----------------------------------------------
+
+### <i class="fas fa-graduation-cap"></i> Education 
+
+**Shandong University**                                                     
+
+B.S. in Biology Science
+
+Qingdao, China
+
+Sept. 2016-Jun.2020
+
+**Columbia University**
+
+M.S. in Biostatistics
+
+New York, USA
+
+Sept. 2021-Jun.2023
+
+---------------------------------------------------
+
+### <i class="fas fa-briefcase"></i>Professional Experience
+
+**IQVIA, China**                                                           
+
+Intern, Department of Management Consulting
+
+Shanghai, China
+
+May. 2021-July.2021
+
+- Conduct data information retrieval and research based on the project.
+- Analyze and sort data or information, and draw conclusions
+- Assist researchers in other project related work
+
+**ClinChoice Inc**                                                           
+
+Intern, Department of Biostatistics
+
+Shanghai, China
+
+Jan. 2021-Apr.2021
+
+- Support to ensure the accuracy and timeliness of statistical reports or decision-making 
+-	Understand and apply moderately advanced statistical methods
+
+**Zhejiang Hisun BioRay Pharmaceutical Co.Ltd**                             
+
+Intern, Department of cell culture & Department pf analysis 
+
+Zhejiang, China
+
+Jul. 2020-Dec.2020               
+
+- Culture cells in shake flask and bioreactor to get the Anti-Her2 mAb derived from CHO cell line 
+-	Purify the Anti-Her2 mAb by HPLC chromatogaphy and filtration
+-	Analyze the Anti-Her2 mAb including the purity and physicochemical characterization by HPLC, LC-MS, CD and DSC etc.
+
+--------------------------------------------------------------------------------
+
+### <i class="fas fa-flask"></i>Research Experience {data-icon=suitcase}
+
+**Functions of multicopy dnak of M.xanthus DK1622**                            
+
+Prof. Li Yuezhong, state key laboratory of microbial technology in Shandong University
+
+Qingdao, China
+
+Oct. 2018-Dec.2019
+
+- Construct plasmids and knock out genes (dnak, dnaJ and GrpE) by overlapping 
+-	Perform reverse mutation test, physiological and biochemical test on knock-out mutants
+-	Predict the sequence and functions of dnak, dnaJ and GrpE, and compare with NCBI database
+-	Finish phylogenetic tree by Mega
+
+
