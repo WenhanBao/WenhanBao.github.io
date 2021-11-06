@@ -35,6 +35,13 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -416,6 +423,35 @@ rest_raw &lt;- read_csv(&quot;./nyc_inspec.csv&quot;)</code></pre>
     xaxis = list(title = &quot;Latitude&quot;),
     yaxis = list(title = &quot;Longitude&quot;)
   )</code></pre>
+<hr />
+</div>
+<div id="create-the-barchat" class="section level3">
+<h3>Create the barchat</h3>
+<pre class="r"><code>barchat &lt;-
+  rest_raw %&gt;%
+  filter(grade == &quot;A&quot;, boro == &quot;Manhattan&quot;) %&gt;%
+  group_by(camis, grade) %&gt;%
+  arrange(desc(grade_date)) %&gt;%
+  do(head(., n = 1)) %&gt;%
+  ungroup() %&gt;%
+  count(cuisine_description) %&gt;%
+  arrange(desc(n)) %&gt;% 
+  head(9) %&gt;%
+  mutate(n = as.numeric(n),
+         cuisine_description = fct_reorder(cuisine_description, n)) %&gt;% 
+  ggplot(aes(x = cuisine_description, y = n, fill = cuisine_description)) +
+  geom_col() +
+  scale_fill_viridis_d() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplotly(barchat) %&gt;%
+  layout(
+    title = &quot;Top 9 Cuisine Field of Food Safety in Manhattan &quot;,
+    xaxis = list(title = &quot;Cuisine Field&quot;),
+    yaxis = list(title = &quot;Number of restaurant(Grade A)&quot;)
+  )</code></pre>
+<div id="htmlwidget-b9bc31e8c5a4756130c9" style="width:672px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b9bc31e8c5a4756130c9">{"x":{"data":[{"orientation":"v","width":0.9,"base":0,"x":[1],"y":[234],"text":"cuisine_description: Bakery<br />n:  234<br />cuisine_description: Bakery","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(68,1,84,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Bakery","legendgroup":"Bakery","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[2],"y":[237],"text":"cuisine_description: French<br />n:  237<br />cuisine_description: French","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(71,45,123,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"French","legendgroup":"French","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[3],"y":[316],"text":"cuisine_description: Mexican<br />n:  316<br />cuisine_description: Mexican","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(59,82,139,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Mexican","legendgroup":"Mexican","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[4],"y":[349],"text":"cuisine_description: Pizza<br />n:  349<br />cuisine_description: Pizza","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(44,114,142,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Pizza","legendgroup":"Pizza","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[5],"y":[447],"text":"cuisine_description: Japanese<br />n:  447<br />cuisine_description: Japanese","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(33,144,140,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Japanese","legendgroup":"Japanese","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[6],"y":[477],"text":"cuisine_description: Chinese<br />n:  477<br />cuisine_description: Chinese","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(39,173,129,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Chinese","legendgroup":"Chinese","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.9,"base":0,"x":[7],"y":[549],"text":"cuisine_description: Italian<br />n:  549<br />cuisine_description: Italian","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(93,200,99,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Italian","legendgroup":"Italian","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[8],"y":[949],"text":"cuisine_description: Café/Coffee/Tea<br />n:  949<br />cuisine_description: Café/Coffee/Tea","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(170,220,50,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Café/Coffee/Tea","legendgroup":"Café/Coffee/Tea","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.899999999999999,"base":0,"x":[9],"y":[2815],"text":"cuisine_description: American<br />n: 2815<br />cuisine_description: American","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(253,231,37,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"American","legendgroup":"American","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":26.2283105022831,"r":7.30593607305936,"b":74.9563569618931,"l":48.9497716894977},"plot_bgcolor":"rgba(235,235,235,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,9.6],"tickmode":"array","ticktext":["Bakery","French","Mexican","Pizza","Japanese","Chinese","Italian","Café/Coffee/Tea","American"],"tickvals":[1,2,3,4,5,6,7,8,9],"categoryorder":"array","categoryarray":["Bakery","French","Mexican","Pizza","Japanese","Chinese","Italian","Café/Coffee/Tea","American"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-45,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"y","title":"Cuisine Field","hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-140.75,2955.75],"tickmode":"array","ticktext":["0","1000","2000"],"tickvals":[0,1000,2000],"categoryorder":"array","categoryarray":["0","1000","2000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.65296803652968,"tickwidth":0.66417600664176,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(255,255,255,1)","gridwidth":0.66417600664176,"zeroline":false,"anchor":"x","title":"Number of restaurant(Grade A)","hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"cuisine_description","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}}},"hovermode":"closest","barmode":"relative","title":"Top 9 Cuisine Field of Food Safety in Manhattan "},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"9104dfaeb71":{"x":{},"y":{},"fill":{},"type":"bar"}},"cur_data":"9104dfaeb71","visdat":{"9104dfaeb71":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 </div>
 
 

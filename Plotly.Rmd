@@ -46,7 +46,6 @@ boxplot <-
   )
 ```
 
-
 ----------------------------------------------
 
 ### Create the scatterplot
@@ -78,3 +77,32 @@ scatter <-
   )
 ```
 
+----------------------------------------------
+
+### Create the barchat
+
+```{r}
+barchat <-
+  rest_raw %>%
+  filter(grade == "A", boro == "Manhattan") %>%
+  group_by(camis, grade) %>%
+  arrange(desc(grade_date)) %>%
+  do(head(., n = 1)) %>%
+  ungroup() %>%
+  count(cuisine_description) %>%
+  arrange(desc(n)) %>% 
+  head(9) %>%
+  mutate(n = as.numeric(n),
+         cuisine_description = fct_reorder(cuisine_description, n)) %>% 
+  ggplot(aes(x = cuisine_description, y = n, fill = cuisine_description)) +
+  geom_col() +
+  scale_fill_viridis_d() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplotly(barchat) %>%
+  layout(
+    title = "Top 9 Cuisine Field of Food Safety in Manhattan ",
+    xaxis = list(title = "Cuisine Field"),
+    yaxis = list(title = "Number of restaurant(Grade A)")
+  )
+```
