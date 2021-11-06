@@ -1,0 +1,108 @@
+---
+title: "Flexdashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(ggplot2)
+library(p8105.datasets)
+library(plotly)
+rest_raw <- read_csv("./nyc_inspec.csv")
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Top 9 Cuisine Field of Food Safety in Manhattan
+
+```{r echo=FALSE}
+barchat <-
+  rest_raw %>%
+  filter(grade == "A", boro == "Manhattan") %>%
+  group_by(camis, grade) %>%
+  arrange(desc(grade_date)) %>%
+  do(head(., n = 1)) %>%
+  ungroup() %>%
+  count(cuisine_description) %>%
+  arrange(desc(n)) %>% 
+  head(9) %>%
+  mutate(n = as.numeric(n),
+         cuisine_description = fct_reorder(cuisine_description, n)) %>% 
+  ggplot(aes(x = cuisine_description, y = n, fill = cuisine_description)) +
+  geom_col() +
+  scale_fill_viridis_d() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplotly(barchat) %>%
+  layout(
+    xaxis = list(title = "Cuisine Field"),
+    yaxis = list(title = "Number of restaurant(Grade A)")
+  )
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Score for restaurants in Manhattan
+
+```{r echo=FALSE}
+scatter <-
+  rest_raw %>%
+  filter(boro == "Manhattan",
+         latitude != 0) %>%
+  select(camis, score, inspection_date, latitude, longitude) %>%
+  group_by(camis, latitude, longitude) %>%
+  drop_na(score) %>%
+  summarize(mean_score = round(mean(score), digits = 2), .groups = "drop") %>%
+  mutate(text_label = str_c("Scores:", mean_score)) %>%
+  plot_ly(
+    x = ~ latitude,
+    y = ~ longitude,
+    type = "scatter",
+    mode = "markers",
+    color = ~ mean_score,
+    text = ~ text_label,
+    colors = "viridis",
+    alpha = 0.5
+  ) %>%
+  layout(
+    xaxis = list(title = "Latitude"),
+    yaxis = list(title = "Longitude")
+  )
+
+scatter
+```
+
+### Score for restaurants in different location in New York
+
+```{r echo=FALSE}
+boxplot <-
+  rest_raw %>%
+  janitor::clean_names() %>%
+  select(camis, boro, score, inspection_date) %>%
+  unique() %>%
+  mutate(boro = as.character(boro)) %>%
+  filter(boro %in% c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island")) %>%
+  group_by(camis, boro) %>%
+  drop_na(score) %>%
+  summarize(mean_score = round(mean(score), digits = 2), .groups = "drop") %>%
+  mutate(boro = fct_reorder(boro, mean_score)) %>%
+  plot_ly(
+    y = ~ mean_score,
+    color = ~ boro,
+    type = "box",
+    colors = "viridis"
+  ) %>%
+  layout(
+    xaxis = list(title = "Location"),
+    yaxis = list(title = "Score for restaurants")
+  )
+
+boxplot
+```
+

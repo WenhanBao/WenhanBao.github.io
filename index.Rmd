@@ -31,6 +31,6 @@ output:
 
 ### <i class="fas fa-images"></i> Flexdashboard
 
-**Here is link for [Flexdashboard](Resume.html)**
+**Here is link for [Flexdashboard](dashboard.html)**
 
 <img src= "image/pic3.png">  
