@@ -1,11 +1,39 @@
 ---
-title: Wenhan's Website
+title: ""
 output:
   html_document:
     toc: true
     toc_float: true
 ---
 
-### I have a webpage!
+### Welcome to Wenhan's Website.
 
-And I can put all kinds of stuff on it!
+--------------------------------------------------------------------------------
+
+For this website, there include resume, plotly process and dashboard results on the navbar!
+
+--------------------------------------------------------------------------------
+
+### <i class="fas fa-file"></i> Resume
+
+Here is link for my [Resume](Resume.html)
+
+<img src= "image/pic1.jpg">  
+
+--------------------------------------------------------------------------------
+
+### <i class="fas fa-broom"></i> Plotly Process
+
+Here is link for loading and tidying [datasets](Resume.html)
+
+<img src= "./image/pic2.png">  
+
+
+  
+--------------------------------------------------------------------------------
+
+### <i class="fas fa-images"></i> Flexdashboard
+
+Here is link for [Flexdashboard](Resume.html)
+
+<img src= "image/pic3.png">  
