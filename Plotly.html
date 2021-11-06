@@ -11,7 +11,7 @@
 
 
 
-<title>index.knit</title>
+<title>Plotly Process</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -349,32 +349,44 @@ div.tocify {
 
 
 
+<h1 class="title toc-ignore">Plotly Process</h1>
 
 </div>
 
 
-<div id="welcome-to-wenhans-website." class="section level3">
-<h3>Welcome to Wenhan’s Website.</h3>
 <hr />
-<p><strong>This website includes resume, plotly process and dashboard results!</strong></p>
-<hr />
-</div>
-<div id="resume" class="section level3">
-<h3><i class="fas fa-file"></i> Resume</h3>
-<p><strong>Here is link for my <a href="Resume.html">Resume</a></strong></p>
-<p><img src= "image/pic1.jpg"></p>
+<div id="load-datasets-and-library" class="section level3">
+<h3>Load datasets and library</h3>
+<pre class="r"><code>library(tidyverse)
+library(ggplot2)
+library(p8105.datasets)
+library(plotly)
+rest_raw &lt;- read_csv(&quot;./nyc_inspec.csv&quot;)</code></pre>
 <hr />
 </div>
-<div id="plotly-process" class="section level3">
-<h3><i class="fas fa-broom"></i> Plotly Process</h3>
-<p><strong>Here is link for loading and tidying <a href="Plotly.html">datasets</a></strong></p>
-<p><img src= "image/pic2.png"></p>
+<div id="create-the-boxplot" class="section level3">
+<h3>Create the boxplot</h3>
+<pre class="r"><code>boxplot &lt;- 
+  rest_raw %&gt;% 
+  janitor::clean_names() %&gt;% 
+  select(camis, boro, score) %&gt;% 
+  unique() %&gt;%
+  mutate(boro = as.character(boro)) %&gt;% 
+  filter(boro %in% c(&quot;Manhattan&quot;, &quot;Bronx&quot;, &quot;Brooklyn&quot;, &quot;Queens&quot;, &quot;Staten Island&quot;)) %&gt;% 
+  group_by(camis, boro) %&gt;%
+  drop_na(score) %&gt;% 
+  summarize(mean_score = round(mean(score), digits = 2), .groups = &quot;drop&quot;) %&gt;% 
+  mutate(boro = fct_reorder(boro, mean_score)) %&gt;% 
+  plot_ly(y = ~mean_score, color = ~boro, type = &quot;box&quot;, colors = &quot;viridis&quot;) %&gt;% 
+  layout(
+    title = &quot;Score for restaurants in different location in New York&quot;,
+    xaxis = list(title = &quot;Location&quot;),
+    yaxis = list(title = &quot;Score for restaurants&quot;)
+  )</code></pre>
 <hr />
 </div>
-<div id="flexdashboard" class="section level3">
-<h3><i class="fas fa-images"></i> Flexdashboard</h3>
-<p><strong>Here is link for <a href="Resume.html">Flexdashboard</a></strong></p>
-<p><img src= "image/pic3.png"></p>
+<div id="create-three-distinct-plot-type" class="section level3">
+<h3>Create three distinct plot type</h3>
 </div>
 
 
